@@ -1,4 +1,5 @@
-require 'spec_helper'
+require "spec_helper"
+require_relative "../config/environment"
 
 describe "Magazine App" do
   let(:article_title) { "Hello World" }
@@ -10,9 +11,8 @@ describe "Magazine App" do
   end
 
   describe "Create Action" do
-
     it "creates a new article" do
-      visit '/articles/new'
+      visit "/articles/new"
 
       fill_in :title, :with => "my favorite article"
       fill_in :content, :with => "content!!!!"
@@ -24,7 +24,7 @@ describe "Magazine App" do
     end
 
     it "redirects to '/articles/:id'" do
-      visit '/articles/new'
+      visit "/articles/new"
 
       fill_in :title, :with => "an article"
       fill_in :content, :with => "content content content content content"
@@ -34,12 +34,11 @@ describe "Magazine App" do
       expect(page.current_path).to eq("/articles/#{Article.last.id}")
       expect(page.body).to include("content content content content content")
     end
-
   end
 
   describe "Read Action " do
-    describe 'index action' do
-      it 'responds with a 200 status code' do
+    describe "index action" do
+      it "responds with a 200 status code" do
         get "/articles"
         expect(last_response.status).to eq(200)
       end
@@ -51,8 +50,8 @@ describe "Magazine App" do
       end
     end
 
-    describe 'show action' do
-      it 'show page responds with a 200 status code' do
+    describe "show action" do
+      it "show page responds with a 200 status code" do
         get "/articles/#{@article1.id}"
         expect(last_response.status).to eq(200)
       end
@@ -67,24 +66,18 @@ describe "Magazine App" do
         expect(last_response.body).to include(article_content)
       end
     end
-
-
   end
 
-
   describe "update action" do
-
-
-    it 'responds with a 200 status code' do
+    it "responds with a 200 status code" do
       get "/articles/#{@article2.id}/edit"
       expect(last_response.status).to eq(200)
     end
 
-    it 'displays the existing object in the edit form' do
+    it "displays the existing object in the edit form" do
       visit "/articles/#{@article2.id}/edit"
       expect(page.body).to include("#{@article2.title}")
       expect(page.body).to include("#{@article2.content}")
-
     end
 
     it "saves edits to an article" do
@@ -110,12 +103,10 @@ describe "Magazine App" do
       visit "/articles/#{@article2.id}/edit"
       expect(find("[name=_method]", :visible => false).value).to match(/patch/i)
     end
-
   end
 
   describe "delete action" do
-
-    it 'responds with a 200 status code' do
+    it "responds with a 200 status code" do
       get "/articles/#{@article2.id}"
       expect(last_response.status).to eq(200)
     end
@@ -131,12 +122,5 @@ describe "Magazine App" do
       visit "/articles/#{@article2.id}"
       expect(find("[name=_method]", :visible => false).value).to match(/delete/i)
     end
-
   end
-
-
-
-
-
-
 end
